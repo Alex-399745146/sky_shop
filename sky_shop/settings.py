@@ -25,13 +25,12 @@ SECRET_KEY = "django-insecure--n_++%a%5y)r48el5v@eg$z^zngo2zza_bd1$h$c$^#dfo+3^t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-
     # Встроенные приложения.
     "django.contrib.admin",
     "django.contrib.auth",
@@ -39,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # Мои приложения.
     "django_bootstrap5",
     "catalog",
@@ -60,7 +58,7 @@ ROOT_URLCONF = "sky_shop.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -115,7 +113,7 @@ TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
 
-USE_L10N = False # отключает локализованное форматирование дат, чисел и времени.
+USE_L10N = False  # отключает локализованное форматирование дат, чисел и времени.
 
 USE_TZ = True
 

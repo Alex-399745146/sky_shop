@@ -5,6 +5,7 @@
 def index(request):
     return HttpResponse("Страница приложения women.")
 """
+
 from django.shortcuts import render
 
 
