@@ -48,7 +48,7 @@
                     <h4 class="my-0 font-weight-normal">Свяжитесь с нами</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="" class="form-floating">
+                    <form method="post" action="{% url 'catalog:contact' %}" class="form-floating">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="name">Имя</label>
