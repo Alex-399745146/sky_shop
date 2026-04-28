@@ -9,7 +9,8 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "django (==4.2)",
-    "django-bootstrap5 (>=26.2,<27.0)"
+    "django-bootstrap5 (>=26.2,<27.0)",
+    "psycopg2-binary (>=2.9.12,<3.0.0)"
 ]
 
 [tool.poetry]
