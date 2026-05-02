@@ -1,62 +1,78 @@
+"""
+Модели приложения catalog.
+Содержит модели Category и Product для управления каталогом товаров.
+"""
+
 from django.db import models
 
 
 class Category(models.Model):
+    """Модель категории товаров"""
+
     name = models.CharField(
-        max_length=100,
-        verbose_name="Наименование",
+        max_length=100,  # Ограничение длины текста
+        verbose_name="Наименование",  # Читаемое имя в админке/формах
     )
     description = models.TextField(
-        default="Описание отсутствует",
-        verbose_name="Описание",
+        default="Описание отсутствует",  # Значение по умолчанию
+        verbose_name="Описание категории",  # Читаемое имя в админке/формах
     )
 
     def __str__(self):
+        """Строковое представление объекта (для админки, shell)"""
         return self.name
 
     class Meta:
-        verbose_name = "Категория"
-        verbose_name_plural = "Категории"
-        ordering = ['name']
+        """Метаданные модели (настройки таблицы БД)"""
+
+        verbose_name = "Категория"  # Имя в единственном числе
+        verbose_name_plural = "Категории"  # Имя во множественном числе
+        ordering = ["name"]  # Сортировка по алфавиту
 
 
 class Product(models.Model):
+    """Модель товара в каталоге"""
+
     name = models.CharField(
-        max_length=200,
-        verbose_name="Наименование",
+        max_length=200,  # Ограничение длины текста
+        verbose_name="Наименование",  # Читаемое имя в админке/формах
     )
     details = models.TextField(
-        default="Описание отсутствует",
-        verbose_name="Описание",
+        default="Описание отсутствует",  # Значение по умолчанию
+        verbose_name="Описание продукта",  # Читаемое имя в админке/формах
     )
     img = models.ImageField(
-        upload_to="products/",
-        blank=True,
-        null=True,
-        verbose_name="Изображение"
+        upload_to="products/",  # Папка загрузки в MEDIA_ROOT
+        blank=True,  # Необязательное в формах Django
+        null=True,  # Может быть NULL в БД PostgreSQL
+        verbose_name="Изображение",  # Читаемое имя в админке/формах
     )
     category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name="products",
-        verbose_name="Категория",
+        Category,  # Связь с моделью Category
+        on_delete=models.CASCADE,  # При удалении категории → удалить товары
+        related_name="products",  # Обратная связь: category.products.all()
+        verbose_name="Категория",  # Читаемое имя в админке/формах
     )
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name="Цена за покупку"
+        max_digits=10,  # Всего цифр (включая дробную часть)
+        decimal_places=2,  # Цифр после запятой (копейки)
+        verbose_name="Цена за покупку",  # Читаемое имя в админке/формах
     )
     created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Дата создания"
+        auto_now_add=True, verbose_name="Дата создания"  # Автоматически при создании  # Читаемое имя в админке/формах
     )
     updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Дата последнего изменения"
+        auto_now=True,  # Автоматически при каждом сохранении
+        verbose_name="Дата последнего изменения",  # Читаемое имя в админке/формах
     )
 
     def __str__(self):
+        """Строковое представление объекта (для админки, shell)"""
         return self.name
 
     class Meta:
-        verbose_name = "Продукт"
-        verbose_name_plural = "Продукты"
-        ordering = ["-created_at"]   # Минус = сортировка от новых к старым.
+        """Метаданные модели (настройки таблицы БД)"""
+
+        verbose_name = "Продукт"  # Имя в единственном числе
+        verbose_name_plural = "Продукты"  # Имя во множественном числе
+        ordering = ["-created_at"]  # Сортировка от новых к старым
