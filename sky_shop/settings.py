@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Мои приложения.
-    "django_bootstrap5",
-    "catalog",
+    "django_bootstrap5",  #  CDN стили.
+    "django_extensions",  #  Библа  django-extensions.
+    "catalog",            #  Приложение.
 ]
 
 MIDDLEWARE = [
