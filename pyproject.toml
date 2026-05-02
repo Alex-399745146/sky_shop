@@ -11,7 +11,8 @@ dependencies = [
     "django (==4.2)",
     "django-bootstrap5 (>=26.2,<27.0)",  # библа CDN стилей
     "psycopg2-binary (>=2.9.12,<3.0.0)", # библа для работы PostgreSQL
-    "python-dotenv (>=1.2.2,<2.0.0)"     # библа для работы скрытых строчек
+    "python-dotenv (>=1.2.2,<2.0.0)",     # библа для работы скрытых строчек
+    "pillow (>=12.2.0,<13.0.0)"
 ]
 
 [tool.poetry]
