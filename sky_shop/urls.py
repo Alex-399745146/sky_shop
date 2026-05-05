@@ -23,3 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("catalog.urls")),  # Подключаем пространство имён.
 ]
+
+# Медиафайлы только в DEBUG.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

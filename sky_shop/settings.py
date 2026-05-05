@@ -35,6 +35,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -81,6 +82,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "sky_shop.wsgi.application"
 
+
+# MEDIA файлы (загрузка изображений)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
