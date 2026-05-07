@@ -1,0 +1,42 @@
+Текущая кодовая страница: 1251
+[
+{
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+        "name": "iPhone 15",
+        "details": "РЎРјР°СЂС‚С„РѕРЅ Apple",
+        "img": "",
+        "category": 1,
+        "price": "115000.00",
+        "created_at": "2026-05-02T22:44:13.239Z",
+        "updated_at": "2026-05-02T22:55:54.075Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "name": "MacBook Pro",
+        "details": "РќРѕСѓС‚Р±СѓРє Apple",
+        "img": "",
+        "category": 1,
+        "price": "250000.00",
+        "created_at": "2026-05-02T22:44:20.697Z",
+        "updated_at": "2026-05-02T22:44:20.697Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "Р”Р¶РёРЅСЃС‹ Levi's",
+        "details": "РљР»Р°СЃСЃРёС‡РµСЃРєРёРµ РґР¶РёРЅСЃС‹",
+        "img": "",
+        "category": 2,
+        "price": "8500.00",
+        "created_at": "2026-05-02T22:44:28.957Z",
+        "updated_at": "2026-05-02T22:44:28.957Z"
+    }
+}
+]

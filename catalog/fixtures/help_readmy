@@ -1,0 +1,14 @@
+# Выгрузить все данные приложения catalog
+poetry run python manage.py dumpdata catalog --indent 4 > catalog/fixtures/data.json
+
+# Только категории
+poetry run python manage.py dumpdata catalog.Category --indent 4 > catalog/fixtures/categories.json
+
+# Только продукты
+poetry run python manage.py dumpdata catalog.Product --indent 4 > catalog/fixtures/products.json
+
+
+
+
+
+
