@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<!-- Блок карточки.-->
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+            <!-- Пройдём циклом по тому что передали в шаблон через context.-->
+            {% for product in products %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice">
+                        <title>Placeholder</title>
+                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ product.name }}</text>
+                    </svg>
+                    <div class="card-body">
+                        <!-- Обращение к шаблонным переменным.-->
+                        <!-- До 20 символов -->
+                        <p class="card-text">{{ product.name|truncatechars:20 }}</p>
+                        <!-- До 100 символов -->
+                        <p class="card-text">{{ product.details|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Смотреть</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Исправить</button>
+                            </div>
+                            <small class="text-body-secondary">9 минут</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock %}

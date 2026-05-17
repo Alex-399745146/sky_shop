@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("catalog.urls")),  # Подключаем пространство имён.
+    path("", include("catalog.urls", namespace="catalog")),  # Подключаем пространство имён.
 ]
 
 # Медиафайлы только в DEBUG.

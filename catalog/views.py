@@ -9,6 +9,20 @@ def index(request):
 from django.http import HttpResponse
 from django.shortcuts import render
 
+from catalog.models import Product
+
+
+def catalog_list(request):
+    """Вывод всех карточек продукта."""
+    products = Product.objects.all()  # Все карточки товаров.
+    context = {'products': products}  # Контекстный словарь для передачи данных в шаблон.
+    return render(request, "products_list.html", context)
+
+
+# def index(request):
+#     """Вывод информации базового шаблона."""
+#     return render(request, "base.html")
+
 
 def home(request):
     return render(request, "home.html")
