@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Блок карточки.-->
+<div class="container py-5">
+    <div class="row">
+        <!-- Изображение товара -->
+        <div class="col-md-6">
+            {% if product.img %}
+                <img src="{{ product.img.url }}"
+                     class="img-fluid rounded shadow"
+                     alt="{{ product.name }}"
+                     style="width: 100%; max-height: 500px; object-fit: cover;">
+            {% else %}
+                <div class="bg-secondary rounded d-flex align-items-center justify-content-center"
+                     style="height: 400px;">
+                    <span class="text-white fs-3">Нет фото</span>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Информация о товаре -->
+        <div class="col-md-6">
+            <h1 class="mb-3">{{ product.name }}</h1>
+
+            <div class="mb-4">
+                <span class="badge bg-secondary">{{ product.category.name }}</span>
+            </div>
+
+            <h2 class="text-primary mb-4">{{ product.price }} ₽</h2>
+
+            <h5>Описание:</h5>
+            <p class="lead">{{ product.details }}</p>
+
+            <div class="mt-4">
+                <button class="btn btn-primary btn-lg me-2">Добавить в корзину</button>
+                <a href="{% url 'catalog:catalog_list' %}" class="btn btn-outline-secondary btn-lg">Назад к каталогу</a>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="text-muted">
+                <p class="mb-1"><small>Добавлен: {{ product.created_at|date:"d.m.Y H:i" }}</small></p>
+                <p class="mb-0"><small>Обновлён: {{ product.updated_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

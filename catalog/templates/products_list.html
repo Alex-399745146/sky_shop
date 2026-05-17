@@ -9,27 +9,33 @@
             {% for product in products %}
             <div class="col">
                 <div class="card shadow-sm">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice">
-                        <title>Placeholder</title>
-                        <rect width="100%" height="100%" fill="#55595c"></rect>
-                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{ product.name }}</text>
-                    </svg>
+                    {% if product.img %}
+                        <img src="{{ product.img.url }}"
+                             class="card-img-top"
+                             alt="{{ product.name }}"
+                             style="height: 225px; object-fit: cover;">
+                    {% else %}
+                        <svg class="bd-placeholder-img card-img-top" width="100%" height="225">
+                            <rect width="100%" height="100%" fill="#55595c"></rect>
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Нет фото</text>
+                        </svg>
+                    {% endif %}
+
                     <div class="card-body">
-                        <!-- Обращение к шаблонным переменным.-->
-                        <!-- До 20 символов -->
-                        <p class="card-text">{{ product.name|truncatechars:20 }}</p>
-                        <!-- До 100 символов -->
-                        <p class="card-text">{{ product.details|truncatechars:100 }}</p>
+                        <h5 class="card-title">{{ product.name|truncatechars:30 }}</h5>
+                        <p class="card-text text-muted">{{ product.details|truncatechars:100 }}</p>
                         <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold text-primary fs-5">{{ product.price }} ₽</span>
+                            <!-- Кнопка для перехода к конкретной карточке товара.-->
                             <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Смотреть</button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">Исправить</button>
+                                <a href="{% url 'catalog:catalog_detail' product.pk %}" class="btn btn-sm btn-outline-primary">Смотреть</a>
                             </div>
-                            <small class="text-body-secondary">9 минут</small>
                         </div>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <p class="text-center text-muted">Товаров пока нет</p>
             {% endfor %}
 
         </div>
