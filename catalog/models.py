@@ -8,7 +8,7 @@ from django.db import models
 
 
 class Category(models.Model):
-    """Модель категории товаров."""
+    """Класс модели категории товаров."""
 
     name = models.CharField(
         max_length=100,  # Ограничение длины текста.
@@ -32,7 +32,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    """Модель товара в каталоге."""
+    """Класс модели карточек товара в каталоге."""
 
     name = models.CharField(
         max_length=200,  # Ограничение длины текста.
@@ -47,6 +47,7 @@ class Product(models.Model):
         blank=True,  # Необязательное в формах Django.
         null=True,  # Может быть NULL в БД PostgreSQL.
         verbose_name="Изображение",  # Читаемое имя в админке/формах.
+        help_text="Загрузи фото товара",
     )
     category = models.ForeignKey(
         Category,  # Связь с моделью Category.

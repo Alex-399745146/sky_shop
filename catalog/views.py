@@ -7,7 +7,24 @@ def index(request):
 """
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
+
+from catalog.models import Product
+
+
+def catalog_list(request):
+    """Вывод всех карточек продукта."""
+    products = Product.objects.all()  # Все карточки товаров.
+    context = {"products": products}  # Контекстный словарь для передачи данных в шаблон.
+    return render(request, "products_list.html", context)
+
+
+def catalog_detail(request, pk):
+    """Детальная страница товара."""
+    # get_object_or_404 безопаснее и правильнее, чем .get().
+    product = get_object_or_404(Product, id=pk)  # Запрос в БД.
+    context = {"product": product}
+    return render(request, "product_detail.html", context)
 
 
 def home(request):

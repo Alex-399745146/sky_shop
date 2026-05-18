@@ -6,33 +6,34 @@
 - Python 3.13
 - Django 4.2
 - Poetry (управление зависимостями)
-- Bootstrap 5 (вёрстка)
+- Bootstrap 5.2 (фронтенд)
 - PostgreSQL (база данных)
+- Pillow (обработка изображений)
 
 ## Установка
 
 ```bash
-# Клонирование
+# Клонирование репозитория
 git clone <url>
 cd sky_shop
 
-# Установка зависимостей
+# Установка зависимостей через Poetry
 poetry install
 
-# Активация окружения
+# Активация виртуального окружения
 poetry shell
 
 # Настройка переменных окружения
 cp .env.example .env
-# Отредактируй .env и укажи параметры БД
+# Отредактируй .env и укажи параметры подключения к PostgreSQL
 
-# Миграции БД
+# Применение миграций
 poetry run python manage.py migrate
 
-# Создание суперпользователя
+# Создание суперпользователя для админки
 poetry run python manage.py createsuperuser
 
-# Запуск сервера
+# Запуск сервера разработки
 poetry run python manage.py runserver
 ```
 
@@ -45,47 +46,112 @@ poetry run python manage.py runserver
 poetry run python manage.py add_products
 
 # Загрузка из фикстур
-poetry run python manage.py loaddata data.json
+poetry run python manage.py loaddata catalog/fixtures/categories.json
+poetry run python manage.py loaddata catalog/fixtures/products.json
 ```
 
 ### Экспорт данных
 
 ```bash
-# Экспорт в UTF-8 (Windows)
+# Экспорт в UTF-8 (для Windows)
 python export_fixtures.py
 
 # Экспорт категорий
-poetry run python manage.py dumpdata catalog.Category --indent 4 > catalog/fixtures/categories.json
+poetry run python manage.py dumpdata catalog.Category --indent 4 -o catalog/fixtures/categories.json
 
 # Экспорт продуктов
-poetry run python manage.py dumpdata catalog.Product --indent 4 > catalog/fixtures/products.json
+poetry run python manage.py dumpdata catalog.Product --indent 4 -o catalog/fixtures/products.json
+```
+## Функциональность
+
+### Приложение catalog
+- Модели: `Category` (категории товаров), `Product` (товары)
+- Список товаров с изображениями и ценами
+- Детальная страница товара
+- Фильтрация по категориям
+- Страница контактов
+
+### Шаблоны
+- Базовый шаблон с Bootstrap 5
+- Адаптивная вёрстка
+- Компонентная структура (includes)
+- Шаблонные фильтры для обрезки текста
+
+### Админ-панель
+- Управление категориями
+- Управление товарами
+- Загрузка изображений
+
+## Доступные URL
+
+| URL | Название | Описание |
+|-----|----------|----------|
+| `/` | `catalog:catalog_list` | Главная страница (список товаров) |
+| `/product/<int:pk>/` | `catalog:product_detail` | Детальная страница товара |
+| `/contacts/` | `catalog:contacts` | Страница контактов |
+| `/admin/` | — | Админ-панель Django |
+
+## Запуск через Poetry
+
+```bash
+# Активация окружения
+poetry shell
+
+# Запуск сервера
+python manage.py runserver
+
+# Или без активации
+poetry run python manage.py runserver
 ```
 
-## Структура
+## Разработка
 
-```markdown
-sky_shop/
-├── catalog/                    # Приложение каталога
-│   ├── management/
-│   │   └── commands/
-│   │       └── add_products.py # Кастомная команда загрузки данных
-│   ├── fixtures/               # Фикстуры для тестовых данных
-│   ├── models.py
-│   └── views.py
-├── templates/                  # HTML-шаблоны
-├── sky_shop/                   # Настройки проекта
-├── export_fixtures.py          # Скрипт экспорта в UTF-8
-└── manage.py
+```bash
+# Создание миграций после изменения моделей
+poetry run python manage.py makemigrations
+
+# Применение миграций
+poetry run python manage.py migrate
+
+# Запуск shell для отладки
+poetry run python manage.py shell
+
+# Сбор статики (для продакшена)
+poetry run python manage.py collectstatic
 ```
 
-## Приложения
-- **catalog** — каталог товаров и категорий, контакты
+## Git
 
-## Адреса
-- Главная: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-- Каталог: [http://127.0.0.1:8000/catalog/](http://127.0.0.1:8000/catalog/)
-- Контакты: [http://127.0.0.1:8000/contacts/](http://127.0.0.1:8000/contacts/)
-- Админ-панель: [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)
+```bash
+# ✅ Коммитить:
+# - Файлы миграций (catalog/migrations/*.py)
+# - Фикстуры (catalog/fixtures/*.json)
+
+# ❌ НЕ коммитить:
+# - db.sqlite3 (база данных)
+# - __pycache__/
+# - .env (секретные данные)
+```
+
+## ⚠️ Важно: Медиа файлы в репозитории
+
+> **Папка `media/` включена в репозиторий ТОЛЬКО для учебных целей!**
+> 
+> В реальных проектах медиа файлы (загрузки пользователей) **НЕ коммитятся** в Git и добавляются в `.gitignore`.
+> Обычно они хранятся на внешних сервисах (AWS S3, Cloudinary и т.д.).
+> 
+> Здесь файлы добавлены для демонстрации и упрощения развёртывания учебного проекта.
+
+```bash
+# В production проектах:
+# echo "media/" >> .gitignore
+# git rm -r --cached media/
+```
 
 ## Автор
-Alex Bachevskiy
+**Alex Bachevskiy**  
+Инженер-программист Python | SkyPro
+
+---
+
+*Учебный проект курса Python-разработчик*
