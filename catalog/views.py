@@ -8,15 +8,26 @@ def index(request):
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import ListView
 
 from catalog.models import Product
 
 
-def catalog_list(request):
-    """Вывод всех карточек продукта."""
-    products = Product.objects.all()  # Все карточки товаров.
-    context = {"products": products}  # Контекстный словарь для передачи данных в шаблон.
-    return render(request, "products_list.html", context)
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/product_list.html'
+
+
+    # app_name/model
+    # catalog/products_list.html
+
+
+
+# def catalog_list(request):
+#     """Вывод всех карточек продукта."""
+#     products = Product.objects.all()  # Все карточки товаров.
+#     context = {"products": products}  # Контекстный словарь для передачи данных в шаблон.
+#     return render(request, "products_list.html", context)
 
 
 def catalog_detail(request, pk):
