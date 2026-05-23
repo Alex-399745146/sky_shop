@@ -1,6 +1,6 @@
 # sky_shop
 
-Учебный проект интернет-магазина на Django.
+Учебный проект интернет-магазина на Django с блогом и каталогом товаров.
 
 ## Технологии
 - Python 3.13
@@ -28,14 +28,57 @@ cp .env.example .env
 # Отредактируй .env и укажи параметры подключения к PostgreSQL
 
 # Применение миграций
-poetry run python manage.py migrate
+python manage.py migrate
 
 # Создание суперпользователя для админки
-poetry run python manage.py createsuperuser
+python manage.py createsuperuser
 
 # Запуск сервера разработки
-poetry run python manage.py runserver
+python manage.py runserver
 ```
+
+## Функциональность
+
+### Приложение catalog
+- **Модели**: `Category`, `Product`
+- Список товаров с изображениями и ценами
+- Детальная страница товара
+- Фильтрация по категориям
+- Страница контактов
+- Отображение последней статьи блога на главной
+
+### Приложение blog
+- **Модель**: `BlogPost`
+- CRUD операции для статей
+- Счётчик просмотров
+- Фильтр публикации (is_published)
+- Email-уведомление при достижении 100 просмотров
+- Превью изображений с дефолтным значением
+
+### Шаблоны
+- Базовый шаблон с Bootstrap 5
+- Адаптивная вёрстка
+- Компонентная структура (includes)
+- Шаблонные фильтры
+
+### Админ-панель
+- Управление категориями и товарами
+- Управление статьями блога
+- Загрузка изображений
+
+## Доступные URL
+
+| URL | Название | Описание |
+|-----|----------|----------|
+| `/` | `catalog:catalog_list` | Главная (список товаров + последняя статья) |
+| `/product/<int:pk>/` | `catalog:product_detail` | Детальная страница товара |
+| `/contacts/` | `catalog:contact` | Страница контактов |
+| `/blog/` | `blog:list` | Список статей блога |
+| `/blog/<int:pk>/` | `blog:detail` | Детальная страница статьи |
+| `/blog/create/` | `blog:create` | Создание статьи |
+| `/blog/<int:pk>/update/` | `blog:update` | Редактирование статьи |
+| `/blog/<int:pk>/delete/` | `blog:delete` | Удаление статьи |
+| `/admin/` | — | Админ-панель Django |
 
 ## Управление данными
 
@@ -43,11 +86,11 @@ poetry run python manage.py runserver
 
 ```bash
 # Загрузка через кастомную команду
-poetry run python manage.py add_products
+python manage.py add_products
 
 # Загрузка из фикстур
-poetry run python manage.py loaddata catalog/fixtures/categories.json
-poetry run python manage.py loaddata catalog/fixtures/products.json
+python manage.py loaddata catalog/fixtures/categories.json
+python manage.py loaddata catalog/fixtures/products.json
 ```
 
 ### Экспорт данных
@@ -57,96 +100,61 @@ poetry run python manage.py loaddata catalog/fixtures/products.json
 python export_fixtures.py
 
 # Экспорт категорий
-poetry run python manage.py dumpdata catalog.Category --indent 4 -o catalog/fixtures/categories.json
+python manage.py dumpdata catalog.Category --indent 4 -o catalog/fixtures/categories.json
 
 # Экспорт продуктов
-poetry run python manage.py dumpdata catalog.Product --indent 4 -o catalog/fixtures/products.json
-```
-## Функциональность
+python manage.py dumpdata catalog.Product --indent 4 -o catalog/fixtures/products.json
 
-### Приложение catalog
-- Модели: `Category` (категории товаров), `Product` (товары)
-- Список товаров с изображениями и ценами
-- Детальная страница товара
-- Фильтрация по категориям
-- Страница контактов
-
-### Шаблоны
-- Базовый шаблон с Bootstrap 5
-- Адаптивная вёрстка
-- Компонентная структура (includes)
-- Шаблонные фильтры для обрезки текста
-
-### Админ-панель
-- Управление категориями
-- Управление товарами
-- Загрузка изображений
-
-## Доступные URL
-
-| URL | Название | Описание |
-|-----|----------|----------|
-| `/` | `catalog:catalog_list` | Главная страница (список товаров) |
-| `/product/<int:pk>/` | `catalog:product_detail` | Детальная страница товара |
-| `/contacts/` | `catalog:contacts` | Страница контактов |
-| `/admin/` | — | Админ-панель Django |
-
-## Запуск через Poetry
-
-```bash
-# Активация окружения
-poetry shell
-
-# Запуск сервера
-python manage.py runserver
-
-# Или без активации
-poetry run python manage.py runserver
+# Экспорт статей блога
+python manage.py dumpdata blog.BlogPost --indent 4 -o blog/fixtures/blogposts.json
 ```
 
 ## Разработка
 
 ```bash
 # Создание миграций после изменения моделей
-poetry run python manage.py makemigrations
+python manage.py makemigrations
 
 # Применение миграций
-poetry run python manage.py migrate
+python manage.py migrate
 
 # Запуск shell для отладки
-poetry run python manage.py shell
+python manage.py shell
 
 # Сбор статики (для продакшена)
-poetry run python manage.py collectstatic
+python manage.py collectstatic
 ```
+
+## Email уведомления
+
+По умолчанию используется консольный бэкенд — письма выводятся в терминал.
+
+```python
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+```
+
+Для реальной отправки раскомментируй SMTP-настройки в `settings.py`.
 
 ## Git
 
 ```bash
 # ✅ Коммитить:
-# - Файлы миграций (catalog/migrations/*.py)
-# - Фикстуры (catalog/fixtures/*.json)
+# - Файлы миграций (*/migrations/*.py)
+# - Фикстуры (*/fixtures/*.json)
 
 # ❌ НЕ коммитить:
-# - db.sqlite3 (база данных)
+# - db.sqlite3
 # - __pycache__/
-# - .env (секретные данные)
+# - .env
+# - media/ (кроме учебных проектов)
 ```
 
-## ⚠️ Важно: Медиа файлы в репозитории
+## ⚠️ Важно: Медиа файлы
 
-> **Папка `media/` включена в репозиторий ТОЛЬКО для учебных целей!**
+> Папка `media/` включена в репозиторий **ТОЛЬКО для учебных целей**.
 > 
-> В реальных проектах медиа файлы (загрузки пользователей) **НЕ коммитятся** в Git и добавляются в `.gitignore`.
-> Обычно они хранятся на внешних сервисах (AWS S3, Cloudinary и т.д.).
-> 
-> Здесь файлы добавлены для демонстрации и упрощения развёртывания учебного проекта.
-
-```bash
-# В production проектах:
-# echo "media/" >> .gitignore
-# git rm -r --cached media/
-```
+> В production медиа файлы хранятся на внешних сервисах (S3, Cloudinary).
 
 ## Автор
 **Alex Bachevskiy**  
