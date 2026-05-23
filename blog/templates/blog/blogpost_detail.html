@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ object.title }}-Блог
+{% endblock %}
+
+{% block content %}
+<!--Отображение конкретной статьи в блоге-->
+<div class="container py-5">
+    <!--Если есть картинка превью то показываем её-->
+    {% if object.preview %}
+        <img src="{{ object.preview.url }}"
+             class="img-fluid rounded mb-4"
+             alt="{{ object.title }}"
+             style="max-height: 400px; width: 100%; object-fit: cover;">
+    {% endif %}
+
+    <!--Информация о статье-->
+    <h1>{{ object.title }}</h1>
+    
+    <p class="text-muted">
+        <small>{{ object.created_at|date:"d.m.Y H:i" }} | Просмотры: {{ object.views_count }}</small>
+    </p>
+    
+    <div class="lead">
+        {{ object.content|linebreaks }}
+    </div>
+    
+    <hr class="my-4">
+    
+    <div class="d-flex gap-2">
+        <a href="{% url 'blog:update' object.pk %}" class="btn btn-warning">Редактировать</a>
+        <a href="{% url 'blog:delete' object.pk %}" class="btn btn-danger">Удалить</a>
+        <a href="{% url 'blog:list' %}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}
