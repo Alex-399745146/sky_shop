@@ -3,10 +3,19 @@
 from django.views.generic import ListView, DetailView, TemplateView
 
 from catalog.models import Product
+from blog.models import BlogPost
 
 
 class ProductListView(ListView):
     model = Product
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем последнюю опубликованную статью
+        context['latest_post'] = BlogPost.objects.filter(
+            is_published=True
+        ).order_by('-created_at').first()
+        return context
 
 
 class ProductDetailView(DetailView):
