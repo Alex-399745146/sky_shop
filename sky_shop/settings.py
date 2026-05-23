@@ -125,8 +125,8 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Настройки почты (для разработки - вывод в консоль)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'noreply@skystore.ru'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@skystore.ru"
 
 # Для реальной отправки (например, через Gmail):
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

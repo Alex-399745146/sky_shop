@@ -14,10 +14,7 @@ class CategoryAdmin(admin.ModelAdmin):
     """Админка категорий."""
 
     # Отображение в списке.
-    list_display = (
-        "id",
-        "name"
-    )
+    list_display = ("id", "name")
 
 
 #  Регистрационная модель для Product.

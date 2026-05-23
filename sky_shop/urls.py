@@ -3,12 +3,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("catalog.urls")),  # Подключаем пространство имён.
     path("blog/", include("blog.urls")),  # Подключаем пространство имён.
-
 ]
 
 # Медиафайлы только в DEBUG.
