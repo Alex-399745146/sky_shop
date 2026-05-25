@@ -13,7 +13,8 @@ from catalog.models import Category, Product
 class CategoryAdmin(admin.ModelAdmin):
     """Админка категорий."""
 
-    list_display = ("id", "name")  # Отображение в списке.
+    # Отображение в списке.
+    list_display = ("id", "name")
 
 
 #  Регистрационная модель для Product.

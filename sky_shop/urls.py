@@ -5,7 +5,8 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("catalog.urls", namespace="catalog")),  # Подключаем пространство имён.
+    path("", include("catalog.urls")),  # Подключаем пространство имён.
+    path("blog/", include("blog.urls")),  # Подключаем пространство имён.
 ]
 
 # Медиафайлы только в DEBUG.

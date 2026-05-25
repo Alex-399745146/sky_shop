@@ -38,10 +38,12 @@ class Product(models.Model):
         max_length=200,  # Ограничение длины текста.
         verbose_name="Наименование",  # Читаемое имя в админке/формах.
     )
+
     details = models.TextField(
         default="Описание отсутствует",  # Значение по умолчанию.
         verbose_name="Описание продукта",  # Читаемое имя в админке/формах.
     )
+
     img = models.ImageField(
         upload_to="products/",  # Папка загрузки в MEDIA_ROOT.
         blank=True,  # Необязательное в формах Django.
@@ -49,21 +51,25 @@ class Product(models.Model):
         verbose_name="Изображение",  # Читаемое имя в админке/формах.
         help_text="Загрузи фото товара",
     )
+
     category = models.ForeignKey(
         Category,  # Связь с моделью Category.
         on_delete=models.CASCADE,  # При удалении категории -> удалить товары.
         related_name="products",  # Обратная связь: category.products.all().
         verbose_name="Категория",  # Читаемое имя в админке/формах.
     )
+
     price = models.DecimalField(  # FloatField - ошибки округления -> DecimalField.
         max_digits=10,  # Всего цифр (включая дробную часть).
         decimal_places=2,  # Цифр после запятой (копейки).
         verbose_name="Цена за покупку",  # Читаемое имя в админке/формах.
     )
+
     created_at = models.DateTimeField(
         auto_now_add=True,  # Автоматически при создании.
         verbose_name="Дата создания",  # Читаемое имя в админке/формах.
     )
+
     updated_at = models.DateTimeField(
         auto_now=True,  # Автоматически при каждом сохранении.
         verbose_name="Дата последнего изменения",  # Читаемое имя в админке/формах.

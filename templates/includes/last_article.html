@@ -1,0 +1,30 @@
+<!-- Последняя статья блога -->
+{% if latest_post %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="row g-0">
+                    {% if latest_post.preview %}
+                    <div class="col-md-4">
+                        <img src="{{ latest_post.preview.url }}" class="img-fluid rounded-start" alt="{{ latest_post.title }}" style="height: 100%; object-fit: cover;">
+                    </div>
+                    {% endif %}
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <span class="badge bg-primary mb-2">Новость</span>
+                            <h3 class="card-title">{{ latest_post.title }}</h3>
+                            <p class="card-text text-muted">
+                                <small>{{ latest_post.created_at|date:"d.m.Y" }}</small>
+                            </p>
+                            <p class="card-text">{{ latest_post.content|truncatewords:30 }}</p>
+                            <a href="{% url 'blog:detail' latest_post.pk %}" class="btn btn-primary">Читать полностью</a>
+                            <a href="{% url 'blog:list' %}" class="btn btn-outline-secondary">Все новости</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
