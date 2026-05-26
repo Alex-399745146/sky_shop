@@ -1,11 +1,11 @@
 # catalog/views.py
 
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, FormView
+from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
 
 from blog.models import BlogPost
-from catalog.models import Product
 from catalog.forms import ContactForm, ProductForm
+from catalog.models import Product
 
 
 # Create - создание продукта.
@@ -15,7 +15,7 @@ class ProductCreateView(CreateView):
 
     def get_success_url(self):
         """Редирект на страницу созданного продукта."""
-        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("catalog:product_detail", kwargs={"pk": self.object.pk})
 
 
 # Read - весь список.
@@ -40,25 +40,25 @@ class ProductUpdateView(UpdateView):
 
     def get_success_url(self):
         """Редирект на страницу отредактированного продукта."""
-        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+        return reverse_lazy("catalog:product_detail", kwargs={"pk": self.object.pk})
 
 
 # Delete - удаление продукта.
 class ProductDeleteView(DeleteView):
     model = Product
-    success_url = reverse_lazy('catalog:product_list')
+    success_url = reverse_lazy("catalog:product_list")
 
 
 class ContactFormView(FormView):
-    template_name = 'catalog/contacts.html'
+    template_name = "catalog/contacts.html"
     form_class = ContactForm
-    success_url = reverse_lazy('catalog:contacts')
+    success_url = reverse_lazy("catalog:contacts")
 
     def form_valid(self, form):
         # Получаем данные из формы
-        name = form.cleaned_data['name']
-        phone = form.cleaned_data['phone']
-        message = form.cleaned_data['message']
+        name = form.cleaned_data["name"]
+        phone = form.cleaned_data["phone"]
+        message = form.cleaned_data["message"]
 
         # Здесь можно отправить email, сохранить в БД и т.д.
         print(f"Имя: {name}, Телефон: {phone}, Сообщение: {message}")
