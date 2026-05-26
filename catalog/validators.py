@@ -29,3 +29,15 @@ def validate_stop_words(value):
             )
 
     return value
+
+
+def validate_price(check_price):
+    """Проверка цены - что она не отрицательная."""
+    if check_price < 0:
+        raise ValidationError(
+            'Отрицательная цена? Это не благотворительность! 💸'
+        )
+    elif check_price == 0:
+        raise ValidationError(
+            'Бесплатно не отдаём, введите реальную цену! 🤑'
+        )

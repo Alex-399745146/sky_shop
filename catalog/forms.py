@@ -2,7 +2,7 @@
 
 from django import forms
 from catalog.models import Product
-from catalog.validators import validate_stop_words
+from catalog.validators import validate_stop_words, validate_price
 
 
 class ProductForm(forms.ModelForm):
@@ -31,6 +31,7 @@ class ProductForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'step': '0.01',
+                'min': '0.01',
                 'placeholder': '0.00'
             }),
         }
@@ -42,14 +43,20 @@ class ProductForm(forms.ModelForm):
         self.fields['details'].validators.append(validate_stop_words)
 
     def clean_name(self):
-        """Дополнительная проверка названия."""
+        """Валидация поля name."""
         name = self.cleaned_data.get('name')
         return validate_stop_words(name)
 
     def clean_details(self):
-        """Дополнительная проверка описания."""
+        """Валидация поля details."""
         details = self.cleaned_data.get('details')
         return validate_stop_words(details)
+
+    def clean_price(self):
+        """Валидация поля price."""
+        check_price = self.cleaned_data.get('price')
+        validate_price(check_price)
+        return check_price
 
 
 class ContactForm(forms.Form):

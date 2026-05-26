@@ -13,6 +13,10 @@ class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
 
+    def get_success_url(self):
+        """Редирект на страницу созданного продукта."""
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
 
 # Read - весь список.
 class ProductListView(ListView):
@@ -35,6 +39,7 @@ class ProductUpdateView(UpdateView):
     form_class = ProductForm
 
     def get_success_url(self):
+        """Редирект на страницу отредактированного продукта."""
         return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
 
 
