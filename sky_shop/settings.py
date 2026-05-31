@@ -34,12 +34,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Мои приложения.
-    # "django_bootstrap5",  # Стили по CDN.
-    "django_extensions",  # Библа  django-extensions.
+    # Мои зарегистрированные приложения.
+    # "django_bootstrap5",  # Подключение стилей по CDN.
+    "django_extensions",
     "catalog",  # Приложение_1.
     "blog",  # Приложение_2.
+    "users",  # Приложение_3.
 ]
+
+AUTH_USER_MODEL = "users.User"  # Django для авторизации используй эту модель.
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
