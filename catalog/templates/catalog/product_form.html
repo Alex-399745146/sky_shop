@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Редактировать{% else %}Создать{% endif %} карточку-Skystore{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4">{% if object %}Редактировать{% else %}Создать{% endif %} карточку продукта</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Название</label>
+                    <input type="text" name="name" value="{{ form.name.value|default:'' }}" maxlength="200" required class="form-control" id="id_name">
+                    {% if form.name.errors %}
+                        <div class="text-danger">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_details" class="form-label">Описание</label>
+                    <textarea name="details" rows="5" class="form-control" id="id_details">{{ form.details.value|default:'' }}</textarea>
+                    {% if form.details.errors %}
+                        <div class="text-danger">{{ form.details.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_img" class="form-label">Изображение</label>
+                    <input type="file" name="img" accept="image/*" class="form-control" id="id_img">
+                    {% if object.img %}
+                        <div class="mt-2">
+                            <img src="{{ object.img.url }}" alt="{{ object.name }}" style="max-width: 200px; height: auto;" class="rounded">
+                            <small class="text-muted d-block mt-1">Текущее: {{ object.img.name }}</small>
+                        </div>
+                    {% endif %}
+                    {% if form.img.errors %}
+                        <div class="text-danger">{{ form.img.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_category" class="form-label">Категория</label>
+                    <select name="category" required class="form-control" id="id_category">
+                        <option value="">---------</option>
+                        {% for cat in form.category.field.queryset %}
+                            <option value="{{ cat.pk }}" {% if form.category.value == cat.pk or object.category.pk == cat.pk %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    {% if form.category.errors %}
+                        <div class="text-danger">{{ form.category.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_price" class="form-label">Цена (₽)</label>
+                    <input type="number" step="0.01" name="price" value="{{ form.price.value|default:'' }}" required class="form-control" id="id_price">
+                    {% if form.price.errors %}
+                        <div class="text-danger">{{ form.price.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    {% if object %}
+                        <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-secondary">Отмена</a>
+                    {% else %}
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-secondary">Отмена</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
