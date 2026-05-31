@@ -1,5 +1,5 @@
 {% load static %}
-<!-- Базовый шаблон -->
+<!-- Базовый шаблон base.html-->
 <!DOCTYPE html>
 <html lang="ru" data-bs-theme="auto">
 <head>
@@ -36,13 +36,13 @@
 
     <main>
         {% include "includes/header.html" %}
-
-        <!-- Последняя статья блога -->
         {% include "includes/last_article.html" %}
 
-        {% block content %}
-            <!-- Блок цикличного вывода всех карточек.-->
-        {% endblock %}
+        <div class="container my-4">
+            {% block content %}
+                <!-- Блок цикличного вывода всех карточек.-->
+            {% endblock %}
+        </div>
     </main>
 
     {% include "includes/footer.html" %}  <!-- Блок подвальной части страницы. -->

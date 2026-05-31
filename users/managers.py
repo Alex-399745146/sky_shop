@@ -22,8 +22,8 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
 
         user = self.model(email=email, **extra_fields)
-        user.set_password(password)        # хешируем пароль
-        user.save(using=self._db)         # сохраняем в БД, учитывая правильный alias
+        user.set_password(password)  # хешируем пароль
+        user.save(using=self._db)  # сохраняем в БД, учитывая правильный alias
         return user
 
     def create_user(self, email, password=None, **extra_fields):

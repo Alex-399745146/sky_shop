@@ -1,9 +1,10 @@
 # users/models.py
 
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from .managers import UserManager
+
 # вынес менеджер в managers.py согласно лучших практик кастомный менеджер необходим
 # базовый менеджер ожидает наличие поля username и может вести себя неправильно.
 
@@ -24,7 +25,7 @@ class User(AbstractUser):
 
     # Основное поле аутентификации.
     email = models.EmailField(
-        unique=True, # Поле email станет уникальным.
+        unique=True,  # Поле email станет уникальным.
         verbose_name="Email",  # Человеко‑читаемое имя поля (для админки и форм).
     )
 
@@ -58,6 +59,12 @@ class User(AbstractUser):
         # null=False по умолчанию -> в БД будет храниться "" для пустого значения.
     )
 
+    token = models.CharField(
+        max_length=100,
+        verbose_name="Токен",
+        blank=True,
+    )
+
     # Настройки аутентификации Django.
 
     # Говорим Django, что теперь "имя пользователя" (логин) — это email.
@@ -76,12 +83,10 @@ class User(AbstractUser):
     # - умеет создавать суперпользователей без username (create_superuser).
     objects = UserManager()
 
-
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
         ordering = ["email"]
-
 
     def __str__(self):
         """
