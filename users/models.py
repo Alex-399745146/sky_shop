@@ -21,7 +21,7 @@ class User(AbstractUser):
 
     # Поле username из родительского AbstractUser нам больше не нужно.
     # Мы будем логиниться по email, поэтому отключаем username.
-    username = None
+    username = None  # type: ignore[assignment]
 
     # Основное поле аутентификации.
     email = models.EmailField(
@@ -81,7 +81,7 @@ class User(AbstractUser):
     # Подключаем свой менеджер, который:
     # - умеет создавать пользователей по email (create_user);
     # - умеет создавать суперпользователей без username (create_superuser).
-    objects = UserManager()
+    objects = UserManager()  # type: ignore[misc, assignment]
 
     class Meta:
         verbose_name = "Пользователь"

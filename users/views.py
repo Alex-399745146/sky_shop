@@ -2,17 +2,15 @@
 
 import secrets
 
-from django.urls import reverse, reverse_lazy
 from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
 
 from .forms import UserRegistrationForm  # Сделаем сразу ниже.
 from .models import User
-from django.conf import settings
 
 
 class UserLoginView(LoginView):
@@ -21,7 +19,8 @@ class UserLoginView(LoginView):
 
 
 class UserLogoutView(LogoutView):
-    next_page = reverse_lazy("catalog:product_list")  # Куда редиректить после выхода.
+    # Куда редиректить после выхода.
+    next_page = reverse_lazy("catalog:product_list")  # type: ignore[assignment]
 
 
 class UserRegisterView(CreateView):
@@ -38,12 +37,12 @@ class UserRegisterView(CreateView):
         user.token = token
         user.save()
         host = self.request.get_host()
-        url = f"http://{host}/users/email-confirm/{token}/" # Ссылка для пользователя на почту.
+        url = f"http://{host}/users/email-confirm/{token}/"  # Ссылка для пользователя на почту.
         send_mail(
             subject="Подтверждение почты",
             message=f"Привет, перейди по ссылки для подтверждения почты {url}.",
             from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email]
+            recipient_list=[user.email],
         )
         return super().form_valid(form)
 
