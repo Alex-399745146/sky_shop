@@ -1,165 +1,100 @@
 # sky_shop
 
-Учебный проект интернет-магазина на Django с блогом и каталогом товаров.
+Учебный интернет-магазин на Django с каталогом, блогом и пользователями.
 
-## Технологии
-- Python 3.13
-- Django 4.2
-- Poetry (управление зависимостями)
-- Bootstrap 5.2 (фронтенд)
-- PostgreSQL (база данных)
-- Pillow (обработка изображений)
+## Стек
+
+- Python 3.13, Django 4.2, PostgreSQL  
+- Poetry, Bootstrap 5.2, Pillow
 
 ## Установка
 
 ```bash
-# Клонирование репозитория
 git clone <url>
 cd sky_shop
 
-# Установка зависимостей через Poetry
 poetry install
-
-# Активация виртуального окружения
 poetry shell
 
-# Настройка переменных окружения
-cp .env.example .env
-# Отредактируй .env и укажи параметры подключения к PostgreSQL
-
-# Применение миграций
+cp .env.example .env  # настроить доступ к БД
 python manage.py migrate
-
-# Создание суперпользователя для админки
 python manage.py createsuperuser
-
-# Запуск сервера разработки
 python manage.py runserver
 ```
 
-## Функциональность
+## Основные возможности
 
-### Приложение catalog
-- **Модели**: `Category`, `Product`
-- Список товаров с изображениями и ценами
-- Детальная страница товара
-- Фильтрация по категориям
-- Страница контактов
-- Отображение последней статьи блога на главной
+### Catalog
 
-### Приложение blog
-- **Модель**: `BlogPost`
-- CRUD операции для статей
-- Счётчик просмотров
-- Фильтр публикации (is_published)
-- Email-уведомление при достижении 100 просмотров
-- Превью изображений с дефолтным значением
+- Модели `Category`, `Product`  
+- Список и детальная страница товара  
+- Фильтрация по категориям  
+- Контакты + вывод последней статьи блога на главной
 
-### Шаблоны
-- Базовый шаблон с Bootstrap 5
-- Адаптивная вёрстка
-- Компонентная структура (includes)
-- Шаблонные фильтры
+### Blog
 
-### Админ-панель
-- Управление категориями и товарами
-- Управление статьями блога
-- Загрузка изображений
+- Модель `BlogPost`, полный CRUD  
+- Счётчик просмотров + фильтр по `is_published`  
+- Email-уведомление при 100+ просмотрах  
+- Превью изображений с дефолтом
 
-## Доступные URL
+### Users
 
-| URL | Название | Описание |
-|-----|----------|----------|
-| `/` | `catalog:catalog_list` | Главная (список товаров + последняя статья) |
-| `/product/<int:pk>/` | `catalog:product_detail` | Детальная страница товара |
-| `/contacts/` | `catalog:contact` | Страница контактов |
-| `/blog/` | `blog:list` | Список статей блога |
-| `/blog/<int:pk>/` | `blog:detail` | Детальная страница статьи |
-| `/blog/create/` | `blog:create` | Создание статьи |
-| `/blog/<int:pk>/update/` | `blog:update` | Редактирование статьи |
-| `/blog/<int:pk>/delete/` | `blog:delete` | Удаление статьи |
-| `/admin/` | — | Админ-панель Django |
+- Кастомный `User` с логином по email (без username).  
+- Профиль: аватар, телефон, страна, токен для подтверждения.  
+- Регистрация с email-подтверждением ссылки до активации аккаунта.  
+- Вход/выход, редирект после logout на главную, отображение «Вы вошли как \<email\>» в шапке.
 
-## Управление данными
+### UI и шаблоны
 
-### Загрузка тестовых данных
+- Базовый шаблон на Bootstrap 5  
+- Фиксированный navbar (`fixed-top`) + кнопки входа/выхода.  
+- Адаптивная сетка карточек: 1 / 2 / 3 в ряд в зависимости от ширины экрана.  
+- «Липкий» footer, всегда внизу окна (flex + `min-vh-100`).  
+- Компонентные include-шаблоны.
+
+## Важные URL
+
+- `/` — список товаров + последняя статья (`catalog:product_list`)  
+- `/product/<pk>/` — товар (`catalog:product_detail`)  
+- `/contacts/` — контакты (`catalog:contacts`)  
+- `/blog/` и CRUD по блог-постам (`blog:*`)  
+- `/users/login/`, `/users/logout/`, `/users/register/`, `/users/email-confirm/<token>/` (`users:*`)  
+- `/admin/` — админка
+
+## Данные
 
 ```bash
-# Загрузка через кастомную команду
+# Загрузка тестовых данных
 python manage.py add_products
-
-# Загрузка из фикстур
 python manage.py loaddata catalog/fixtures/categories.json
 python manage.py loaddata catalog/fixtures/products.json
-```
 
-### Экспорт данных
-
-```bash
-# Экспорт в UTF-8 (для Windows)
-python export_fixtures.py
-
-# Экспорт категорий
+# Экспорт
 python manage.py dumpdata catalog.Category --indent 4 -o catalog/fixtures/categories.json
-
-# Экспорт продуктов
 python manage.py dumpdata catalog.Product --indent 4 -o catalog/fixtures/products.json
-
-# Экспорт статей блога
 python manage.py dumpdata blog.BlogPost --indent 4 -o blog/fixtures/blogposts.json
 ```
 
-## Разработка
+## Email
 
-```bash
-# Создание миграций после изменения моделей
-python manage.py makemigrations
-
-# Применение миграций
-python manage.py migrate
-
-# Запуск shell для отладки
-python manage.py shell
-
-# Сбор статики (для продакшена)
-python manage.py collectstatic
-```
-
-## Email уведомления
-
-По умолчанию используется консольный бэкенд — письма выводятся в терминал.
+По умолчанию:
 
 ```python
-# settings.py
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 ```
 
-Для реальной отправки раскомментируй SMTP-настройки в `settings.py`.
+Для реальной отправки — включить SMTP-настройки в `settings.py`.
 
-## Git
+## Git и медиа
 
-```bash
-# ✅ Коммитить:
-# - Файлы миграций (*/migrations/*.py)
-# - Фикстуры (*/fixtures/*.json)
-
-# ❌ НЕ коммитить:
-# - db.sqlite3
-# - __pycache__/
-# - .env
-# - media/ (кроме учебных проектов)
-```
-
-## ⚠️ Важно: Медиа файлы
-
-> Папка `media/` включена в репозиторий **ТОЛЬКО для учебных целей**.
-> 
-> В production медиа файлы хранятся на внешних сервисах (S3, Cloudinary).
+- Коммитим миграции и фикстуры.  
+- Не коммитим: `__pycache__/`, `.env`, `media/` (кроме учебной цели).  
+- `media/` в репозитории только для обучения, в production обычно S3/Cloudinary и т.п.
 
 ## Автор
+
 **Alex Bachevskiy**  
-Инженер-программист Python | SkyPro
+Инженер-программист Python | SkyPro  
 
----
-
-*Учебный проект курса Python-разработчик*
+*Учебный проект курса «Python-разработчик»*
