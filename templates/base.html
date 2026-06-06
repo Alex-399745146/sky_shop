@@ -1,5 +1,5 @@
 {% load static %}
-<!-- Базовый шаблон -->
+<!-- Базовый шаблон base.html-->
 <!DOCTYPE html>
 <html lang="ru" data-bs-theme="auto">
 <head>
@@ -12,7 +12,8 @@
     <title>{% block title %}Skystore{% endblock %}</title>
     {% include "includes/style_css.html" %}<!-- Блок подключения стиля. -->
 </head>
-<body>
+<!--Липкий подвал через flexbox страница на всю высоту окна, контент тянется, а футер прижимается вниз.-->
+<body  class="d-flex flex-column min-vh-100">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"></path>
@@ -34,15 +35,15 @@
         {% include "includes/up_menu.html" %}
     </header>
 
-    <main>
+    <main class="flex-grow-1">
         {% include "includes/header.html" %}
-
-        <!-- Последняя статья блога -->
         {% include "includes/last_article.html" %}
 
-        {% block content %}
-            <!-- Блок цикличного вывода всех карточек.-->
-        {% endblock %}
+        <div class="container my-4">
+            {% block content %}
+                <!-- Блок цикличного вывода всех карточек.-->
+            {% endblock %}
+        </div>
     </main>
 
     {% include "includes/footer.html" %}  <!-- Блок подвальной части страницы. -->

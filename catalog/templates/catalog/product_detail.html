@@ -42,6 +42,7 @@
             <hr class="my-4">
 
             <div class="text-muted">
+                <p class="mb-1"><small>Владелец: {{ object.owner.email }}</small></p>
                 <p class="mb-1"><small>Добавлен: {{ product.created_at|date:"d.m.Y H:i" }}</small></p>
                 <p class="mb-0"><small>Обновлён: {{ product.updated_at|date:"d.m.Y H:i" }}</small></p>
             </div>

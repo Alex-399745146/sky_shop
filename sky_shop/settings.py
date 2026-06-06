@@ -34,12 +34,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Мои приложения.
-    # "django_bootstrap5",  # Стили по CDN.
-    "django_extensions",  # Библа  django-extensions.
+    # Мои зарегистрированные приложения.
+    # "django_bootstrap5",  # Подключение стилей по CDN.
+    "django_extensions",
     "catalog",  # Приложение_1.
     "blog",  # Приложение_2.
+    "users",  # Приложение_3.
 ]
+
+AUTH_USER_MODEL = "users.User"  # Django для авторизации используй эту модель.
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -125,14 +128,22 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Настройки почты (для разработки - вывод в консоль)
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "noreply@skystore.ru"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# DEFAULT_FROM_EMAIL = "noreply@skystore.ru"
 
-# Для реальной отправки (например, через Gmail):
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your-email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'your-app-password'
-# DEFAULT_FROM_EMAIL = 'your-email@gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# Для реальной отправки (например, через Yandex):
+
+# Для реальной отправки:
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+LOGIN_URL = "users:login"
+# Редирект для перенаправлений после входа и выхода.
+LOGIN_REDIRECT_URL = "catalog:product_list"
+LOGOUT_REDIRECT_URL = "catalog:product_list"

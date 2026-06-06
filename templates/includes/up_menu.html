@@ -15,14 +15,20 @@
             <div class="col-sm-4 offset-md-1 py-4">
                 <h4>Меню</h4>
                 <ul class="list-unstyled">
+<!--                    <li><a href="{% url 'users:login' %}" class="text-white">Логин</a></li>-->
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:logout' %}" class="text-white">Выход</a></li>
+                    {% else %}
+                    <li><a href="{% url 'users:login' %}" class="text-white">Вход</a></li>
+                    {% endif %}
                     <li><a href="{% url 'catalog:product_list' %}" class="text-white">Главная</a></li>
                     <li><a href="{% url 'catalog:contacts' %}" class="text-white">Контакты</a></li>
                     <li><a href="{% url 'blog:list' %}" class="text-white">Инфоблог</a></li>
                     <li><a href="{% url 'admin:index' %}" class="text-white">Админка</a></li>
                     {% if user.is_authenticated %}
-                        <li><a href="{% url 'admin:logout' %}" class="text-white">Выход</a></li>
+                        <li><a href="{% url 'admin:logout' %}" class="text-white">Выход админка</a></li>
                     {% else %}
-                        <li><a href="{% url 'admin:login' %}" class="text-white">Вход</a></li>
+                        <li><a href="{% url 'admin:login' %}" class="text-white">Вход админка</a></li>
                     {% endif %}
                 </ul>
             </div>

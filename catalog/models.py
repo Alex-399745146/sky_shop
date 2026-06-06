@@ -4,6 +4,7 @@
 Много лишних комментариев ДА знаю это для запоминания!
 """
 
+from django.conf import settings
 from django.db import models
 
 
@@ -73,6 +74,16 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True,  # Автоматически при каждом сохранении.
         verbose_name="Дата последнего изменения",  # Читаемое имя в админке/формах.
+    )
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,  # Ссылка на кастомного пользователя без жёткой привязки к классу.
+        on_delete=models.CASCADE,
+        verbose_name="Владелец",
+        help_text="Кто создал эту карточку товара",
+        related_name="products",  # user.products.all()
+        null=True,
+        blank=True,
     )
 
     def __str__(self):
