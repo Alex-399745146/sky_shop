@@ -32,12 +32,7 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     # Фильтр продукции по категории.
-    list_filter = (
-        "category",
-    )
+    list_filter = ("category",)
 
     # Поиск по имени и описанию.
-    search_fields = (
-        "name",
-        "details"
-    )
+    search_fields = ("name", "details")

@@ -1,17 +1,15 @@
 # catalog/views.py
 
-from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
 
 from blog.models import BlogPost
 from catalog.forms import ContactForm, ProductForm
 from catalog.models import Product
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import PermissionDenied
 
 
 # Create - создание продукта.
@@ -43,12 +41,7 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["latest_post"] = (
-            BlogPost.objects
-            .filter(is_published=True)
-            .order_by("-created_at")
-            .first()
-        )
+        context["latest_post"] = BlogPost.objects.filter(is_published=True).order_by("-created_at").first()
         return context
 
 
@@ -105,9 +98,7 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         user = self.request.user  # Текущий пользователь.
 
         is_owner = product.owner == user  # Является ли он владельцем.
-        is_moderator = user.groups.filter(  # Состоит ли в группе модераторов.
-            name="Модераторы"
-        ).exists()
+        is_moderator = user.groups.filter(name="Модераторы").exists()  # Состоит ли в группе модераторов.
 
         # Доступ есть, если пользователь — владелец или модератор.
         return is_owner or is_moderator

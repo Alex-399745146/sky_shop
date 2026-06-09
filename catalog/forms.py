@@ -23,7 +23,8 @@ class ProductForm(forms.ModelForm):
             "img": forms.FileInput(attrs={"class": "form-control", "accept": "image/*"}),
             "category": forms.Select(attrs={"class": "form-control"}),
             "price": forms.NumberInput(
-                attrs={"class": "form-control", "step": "0.01", "min": "0.01", "placeholder": "0.00"}),
+                attrs={"class": "form-control", "step": "0.01", "min": "0.01", "placeholder": "0.00"}
+            ),
             "is_published": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
