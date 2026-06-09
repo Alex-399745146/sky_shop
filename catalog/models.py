@@ -86,6 +86,11 @@ class Product(models.Model):
         blank=True,
     )
 
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name="Опубликовано",
+    )
+
     def __str__(self):
         """Строковое представление объекта (для админки, shell)."""
         return self.name
@@ -96,3 +101,8 @@ class Product(models.Model):
         verbose_name = "Продукт"  # Имя в единственном числе.
         verbose_name_plural = "Продукты"  # Имя во множественном числе.
         ordering = ["-created_at"]  # Сортировка от новых к старым.
+
+        # Добавим кастомное право изменять поле публикации.
+        permissions = [
+            ("can_unpublish_product", "Can unpublish product"),
+        ]
