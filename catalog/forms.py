@@ -11,7 +11,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ["name", "details", "img", "category", "price"]
+        fields = ["name", "details", "img", "category", "price", "is_published"]
         # Задание №3 добавление стилей, в учебных целях
         # выполнил через построчное применение к каждому полю
         # для гибкой работы по настройке стилей в дальнейшем.
@@ -25,6 +25,7 @@ class ProductForm(forms.ModelForm):
             "price": forms.NumberInput(
                 attrs={"class": "form-control", "step": "0.01", "min": "0.01", "placeholder": "0.00"}
             ),
+            "is_published": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
     def __init__(self, *args, **kwargs):

@@ -1,3 +1,5 @@
+<!--catalog/product_list.html-->
+
 {% extends "base.html" %}
 
 {% block title %}Каталог-Skystore{% endblock %}
@@ -43,14 +45,54 @@
                                     <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-sm btn-outline-primary">Смотреть</a>
                                 </div>
                             </div>
-                            <div class="btn-group w-100">
-                                <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-sm">Редактировать</a>
-                                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger btn-sm">Удалить</a>
+
+                            <div class="d-flex w-100 gap-2">
+
+                                <!--Кнопка "Редактировать" — только владелец-->
+                                {% if user.is_authenticated and product.owner == user %}
+                                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning btn-sm">
+                                        Редактировать
+                                    </a>
+                                {% endif %}
+
+                                <!--Снять с публикации — только модераторы, только для опубликованных-->
+                                {% if user.is_authenticated and perms.catalog.can_unpublish_product and product.is_published %}
+                                    <form method="post" action="{% url 'catalog:product_unpublish' product.pk %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-secondary btn-sm">
+                                            Скрыть
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                                <!--Кнопка "Удалить" — владелец или модератор-->
+                                {% if user.is_authenticated %}
+                                    {% if product.owner == user %}
+                                        <form method="post" action="{% url 'catalog:product_delete' product.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    {% elif perms.catalog.can_unpublish_product or perms.catalog.delete_product %}
+                                        <!--Модераторы тоже видят кнопку-->
+                                        <form method="post" action="{% url 'catalog:product_delete' product.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+
                             </div>
+
                         </div>
+
                     </div>
 
                 </div>
+
             </div>
             {% empty %}
             <p class="text-center text-muted">Товаров пока нет</p>
