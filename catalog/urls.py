@@ -3,6 +3,7 @@
 from django.urls import path
 
 from .views import (
+    CategorySelectView,
     ContactFormView,
     ProductCreateView,
     ProductDeleteView,
@@ -10,7 +11,6 @@ from .views import (
     ProductListView,
     ProductUnpublishView,
     ProductUpdateView,
-    CategorySelectView
 )
 
 app_name = "catalog"
