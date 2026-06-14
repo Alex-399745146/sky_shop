@@ -9,9 +9,10 @@ from django.views.generic import CreateView, DeleteView, DetailView, FormView, L
 
 from blog.models import BlogPost
 from catalog.forms import ContactForm, ProductForm
-from catalog.models import Product
+from catalog.models import Product, Category
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from catalog.services import get_products_by_category
 
 
 # Create - создание продукта.
@@ -141,3 +142,25 @@ class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
         product.is_published = False
         product.save()
         return redirect("catalog:product_detail", pk=product.pk)
+
+
+class CategorySelectView(ListView):
+    """
+    Страница с выпадающим списком категорий и товарами выбранной категории.
+    """
+    model = Product
+    template_name = "catalog/category_select.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.request.GET.get("category")
+        if not category_id:
+            # категория не выбрана — не показываем товары
+            return Product.objects.none()
+        return get_products_by_category(int(category_id))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()  # для <select>
+        context["selected_category_id"] = self.request.GET.get("category")
+        return context
