@@ -10,6 +10,8 @@ from django.views.generic import CreateView, DeleteView, DetailView, FormView, L
 from blog.models import BlogPost
 from catalog.forms import ContactForm, ProductForm
 from catalog.models import Product
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 
 # Create - создание продукта.
@@ -46,6 +48,7 @@ class ProductListView(ListView):
 
 
 # Read - детально продукт.
+@method_decorator(cache_page(60 * 5), name="dispatch")  # 5 минут жизнь кэша.
 class ProductDetailView(DetailView):
     model = Product
 

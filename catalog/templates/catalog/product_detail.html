@@ -37,21 +37,14 @@
             <h5>Описание:</h5>
             <p class="lead">{{ object.details }}</p>
 
+            <!--Блок с кнопками-->
             <div class="mt-4">
 
-                <div class="mt-2">
-                    <button class="btn btn-primary btn-lg me-2">Добавить в корзину</button>
-                    <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary btn-lg">Назад к каталогу</a>
-                </div>
-
-                <!--Кнопка которую видит только модератор-->
-                <div class="mt-2">
-                    {% if perms.catalog.can_unpublish_product and object.is_published %}
-                        <form method="post" action="{% url 'catalog:product_unpublish' object.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-warning btn-lg me-2">Снять с публикации</button>
-                        </form>
-                    {% endif %}
+                <div class="mt-2 mb-2">
+                    <button class="btn btn-sm btn-primary btn-lg me-2 mb-2">В корзину</button>
+                    <a href="{% url 'catalog:product_list' %}" class="btn btn-sm btn-outline-secondary btn-lg me-2 mb-2">В каталог</a>
+                    <a href="{% url 'catalog:product_update' object.pk %}" class="btn btn-sm btn-warning btn-lg me-2 mb-2">Исправить</a>
+                    <a href="{% url 'catalog:product_delete' object.pk %}" class="btn btn-sm btn-danger btn-lg me-2 mb-2">Удалить</a>
                 </div>
 
             </div>
@@ -61,6 +54,16 @@
                 <p class="mb-1"><small>Владелец: {{ object.owner.email }}</small></p>
                 <p class="mb-1"><small>Добавлен: {{ object.created_at|date:"d.m.Y H:i" }}</small></p>
                 <p class="mb-0"><small>Обновлён: {{ object.updated_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+
+            <!--Кнопка которую видит только модератор-->
+            <div class="mt-2">
+                {% if perms.catalog.can_unpublish_product and object.is_published %}
+                    <form method="post" action="{% url 'catalog:product_unpublish' object.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-warning btn-lg me-2">Отмена публикации</button>
+                    </form>
+                {% endif %}
             </div>
 
         </div>
