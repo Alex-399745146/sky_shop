@@ -1,15 +1,19 @@
 # catalog/views.py
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, ListView, UpdateView
 
 from blog.models import BlogPost
 from catalog.forms import ContactForm, ProductForm
-from catalog.models import Product
+from catalog.models import Category, Product
+from catalog.services import get_product_list_from_cache, get_products_by_category
 
 
 # Create - создание продукта.
@@ -24,8 +28,9 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         Перед сохранением формы привязываем товар к текущему пользователю.
         Поле owner в форме не показываем — оно заполняется автоматически.
         """
-        form.instance.owner = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        cache.delete("product_list_all")  # Обновление кэша.
+        return response
 
     def get_success_url(self):
         """Редирект на страницу созданного продукта."""
@@ -35,9 +40,15 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 # Read - весь список.
 class ProductListView(ListView):
     model = Product
+    template_name = "catalog/product_list.html"
+    context_object_name = "products"
 
     def get_queryset(self):
-        return Product.objects.filter(is_published=True)
+        """
+        Вместо прямого Product.objects.filter(...)
+        используем сервис с кэшированием.
+        """
+        return get_product_list_from_cache()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -46,6 +57,7 @@ class ProductListView(ListView):
 
 
 # Read - детально продукт.
+@method_decorator(cache_page(60 * 5), name="dispatch")  # 5 минут жизнь кэша.
 class ProductDetailView(DetailView):
     model = Product
 
@@ -75,6 +87,12 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         """Редирект на страницу отредактированного продукта."""
         return reverse_lazy("catalog:product_detail", kwargs={"pk": self.object.pk})
+
+    def form_valid(self, form):
+        """Обновление кэша"""
+        response = super().form_valid(form)
+        cache.delete("product_list_all")
+        return response
 
 
 # Delete - удаление продукта.
@@ -138,3 +156,26 @@ class ProductUnpublishView(LoginRequiredMixin, PermissionRequiredMixin, View):
         product.is_published = False
         product.save()
         return redirect("catalog:product_detail", pk=product.pk)
+
+
+class CategorySelectView(ListView):
+    """
+    Страница с выпадающим списком категорий и товарами выбранной категории.
+    """
+
+    model = Product
+    template_name = "catalog/category_select.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.request.GET.get("category")
+        if not category_id:
+            # категория не выбрана — не показываем товары
+            return Product.objects.none()
+        return get_products_by_category(int(category_id))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()  # для <select>
+        context["selected_category_id"] = self.request.GET.get("category")
+        return context
