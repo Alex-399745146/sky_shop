@@ -1,9 +1,9 @@
 [project]
 name = "sky-shop"
 version = "0.1.0"
-description = ""
+description = "Online store"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Alex Bachevskiy",email = "bachevskiiaa@gmail.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.13"
